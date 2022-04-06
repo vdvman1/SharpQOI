@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SharpQOI.Converter": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../../../qoi_test_images"
+    }
+  }
+}
