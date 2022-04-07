@@ -17,6 +17,10 @@ namespace SharpQOI
             (byte)'f'
         });
 
+        public static readonly ReadOnlyMemory<byte> StreamEnd = new(new byte[] {
+            0, 0, 0, 0, 0, 0, 0, 1
+        });
+
         private const int OpBits = 2;
         private const int DataBits = 8 - OpBits;
         private const byte OpMask = 0b11 << DataBits;
@@ -199,6 +203,16 @@ namespace SharpQOI
 
                     image.Pixels[y, x] = color;
                 }
+            }
+
+            if (runLength > 0 || bytes.Length > StreamEnd.Length)
+            {
+                ParseError("Size mismatch, too much data for specified size");
+            }
+
+            if (!bytes.SequenceEqual(StreamEnd.Span))
+            {
+                ParseError("Missing stream end marker");
             }
 
             return image;
