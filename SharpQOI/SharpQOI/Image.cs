@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -66,9 +66,17 @@ namespace SharpQOI
 
             var width = BinaryPrimitives.ReadUInt32BigEndian(bytes);
             bytes = bytes[sizeof(UInt32)..];
+            if (width > int.MaxValue)
+            {
+                ParseError($"Width {width} too large for this implementation");
+            }
 
             var height = BinaryPrimitives.ReadUInt32BigEndian(bytes);
             bytes = bytes[sizeof(UInt32)..];
+            if (height > int.MaxValue)
+            {
+                ParseError($"Height {height} too large for this implementation");
+            }
 
             var channels = bytes[0];
             bytes = bytes[1..];
